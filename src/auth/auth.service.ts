@@ -1,10 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from 'src/mongodb/schemas';
 import { LoginUserDto, RegisterUserDto } from './dto';
+import * as argon from 'argon2';
 
 @Injectable()
 export class AuthService {
-  async register(registerUserDto: RegisterUserDto) {
-    return registerUserDto;
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+
+  async register(registerUserDto: RegisterUserDto): Promise<User> {
+    const hash = await argon.hash(registerUserDto.password);
+
+    delete registerUserDto.password;
+
+    const createdUser = new this.userModel({ ...registerUserDto, hash });
+
+    return createdUser.save();
   }
 
   async login(loginUserDto: LoginUserDto) {
