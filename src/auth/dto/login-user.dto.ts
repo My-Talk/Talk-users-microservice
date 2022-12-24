@@ -1,11 +1,11 @@
 import { IsNumber, IsString, MinLength } from 'class-validator';
-import { MinPassword } from '../auth.constant';
+import { MIN_PASSWORD } from '../auth.constant';
 
 export class LoginUserDto {
   @IsNumber()
   phone: number;
 
   @IsString()
-  @MinLength(MinPassword)
+  @MinLength(MIN_PASSWORD)
   password: string;
 }
