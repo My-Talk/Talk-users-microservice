@@ -49,22 +49,29 @@ export class AuthService {
   }
 
   async login(loginUserDto: LoginUserDto) {
-    const user = await this.userModel.findOne({ phone: loginUserDto.phone });
+    try {
+      const user = await this.userModel.findOne({ phone: loginUserDto.phone });
 
-    if (!user) throw new NotFoundException('User not found.');
+      if (!user)
+        throw new NotFoundException(
+          'User whit the given phone number is not found.',
+        );
 
-    const isPasswordValid = await argon.verify(
-      user.hash,
-      loginUserDto.password,
-    );
+      const isPasswordValid = await argon.verify(
+        user.hash,
+        loginUserDto.password,
+      );
 
-    if (!isPasswordValid) throw new NotFoundException('Wrong password');
+      if (!isPasswordValid) throw new NotFoundException('Wrong password');
 
-    const tokens = await this.generateToken(user.id, user.username);
+      const tokens = await this.generateToken(user.id, user.username);
 
-    await this.updateRefreshToken(user.id, tokens.refresh_token);
+      await this.updateRefreshToken(user.id, tokens.refresh_token);
 
-    return tokens;
+      return tokens;
+    } catch (err) {
+      throw err;
+    }
   }
 
   async refreshTokens(userId: string, bearerRt: string): Promise<Tokens> {
