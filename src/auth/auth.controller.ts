@@ -1,32 +1,44 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { GetUser, PublicRoute } from './decorator';
 import { LoginUserDto, RegisterUserDto } from './dto';
-import { authConyroller } from './enum/auth-controller.enum';
+import { authController } from './enum';
+import { JwtRefreshGuard } from './guards';
 
-@Controller(authConyroller.auth)
+@Controller(authController.auth)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post(authConyroller.register)
+  @PublicRoute()
+  @Post(authController.register)
   async register(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
   }
 
-  @Post(authConyroller.login)
+  @PublicRoute()
+  @Post(authController.login)
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
 
-  @Post(authConyroller.refreshToken)
+  @Post(authController.refreshToken)
   @HttpCode(HttpStatus.OK)
-  async refreshToken(userId: string) {
-    return this.authService.refreshToken(userId);
+  @UseGuards(JwtRefreshGuard)
+  async refreshToken(@GetUser() user: any) {
+    return this.authService.refreshTokens(user.id, user.bearerRefreshToken);
   }
 
-  @Post(authConyroller.logout)
+  @Post(authController.logout)
   @HttpCode(HttpStatus.OK)
-  async logout(userId: string) {
+  async logout(@GetUser('id') userId: string) {
     return this.authService.logout(userId);
   }
 }

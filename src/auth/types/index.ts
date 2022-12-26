@@ -1,5 +1,9 @@
 export type JwtPayload = {
   sub: string;
   username: string;
-  phone: number;
+};
+
+export type Tokens = {
+  access_token: string;
+  refresh_token: string;
 };

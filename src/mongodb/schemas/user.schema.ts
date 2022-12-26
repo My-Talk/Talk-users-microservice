@@ -6,14 +6,14 @@ export type UserDocument = HydratedDocument<User>;
 // Creating a schema for the user
 @Schema()
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   username: string;
 
   @Prop({ default: '' })
   name: string;
 
-  @Prop({ required: true })
-  phone: string;
+  @Prop({ required: true, unique: true })
+  phone: number;
 
   @Prop({ default: '' })
   avatar: string;

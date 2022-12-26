@@ -21,17 +21,17 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   async validate(req: Request, payload: JwtPayload) {
-    const bearerRtToken = req.headers.authorization
+    const bearerRefreshToken = req.headers.authorization
       .replace('Bearer', '')
       .trim();
 
     const user = await this.authService.jwtRefreshValidateUser(
       payload.sub,
-      bearerRtToken,
+      bearerRefreshToken,
     );
 
     if (!user) throw new UnauthorizedException('Not authorized');
 
-    return { ...user, bearerRtToken };
+    return { ...user, bearerRefreshToken };
   }
 }

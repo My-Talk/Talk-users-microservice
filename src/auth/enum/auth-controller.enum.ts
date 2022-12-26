@@ -1,4 +1,4 @@
-export enum authConyroller {
+export enum authController {
   auth = 'auth',
   register = 'register',
   login = 'login',
