@@ -18,8 +18,10 @@ export class UsersController {
     return this.usersService.searchByName(username);
   }
 
-  @Get(`${usersController.userExist}:username`)
+  @Get(`:username`)
   async userExist(@Param('username') username: string): Promise<boolean> {
+    console.log({ username });
+
     return this.usersService.isUserExist(username);
   }
 }
