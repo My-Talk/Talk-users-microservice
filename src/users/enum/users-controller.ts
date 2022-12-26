@@ -1,6 +1,6 @@
 export enum usersController {
   users = 'users',
-  getUser = 'get-user',
+  me = 'me',
   userExist = 'user-exist',
   searchByUsername = 'search-by-username',
 }

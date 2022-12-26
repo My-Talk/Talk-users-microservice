@@ -8,7 +8,7 @@ import { usersController } from './enum';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get(usersController.getUser)
+  @Get(usersController.me)
   async getUser(@GetUser() currentUser: User): Promise<User> {
     return currentUser;
   }

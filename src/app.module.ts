@@ -5,11 +5,19 @@ import { AuthModule } from './auth/auth.module';
 import { JwtGuard } from './auth/guards';
 import { MongodbModule } from './mongodb/mongodb.module';
 import { UsersModule } from './users/users.module';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+
+      validationSchema: Joi.object({
+        MONGO_URI: Joi.string().required(),
+      }),
+    }),
     AuthModule,
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     MongodbModule.forRoot(),
     UsersModule,
   ],

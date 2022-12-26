@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -90,14 +89,12 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(userId: string): Promise<User> {
-    const updatedUser = await this.updateRefreshToken(userId, '');
-
-    return updatedUser;
+  async logout(userId: string) {
+    await this.updateRefreshToken(userId, '');
   }
 
   async jwtValidateUser(userId: string) {
-    const user = await this.userModel.findById({ id: userId });
+    const user = await this.userModel.findById(userId);
 
     if (!user || !user.hashRt) return null;
 
@@ -108,7 +105,7 @@ export class AuthService {
   }
 
   async jwtRefreshValidateUser(userId: string, bearerRt: string) {
-    const user = await this.userModel.findById({ id: userId });
+    const user = await this.userModel.findById(userId);
 
     if (!user || !user.hashRt) return null;
 
@@ -146,18 +143,13 @@ export class AuthService {
     return { access_token, refresh_token };
   }
 
-  private async updateRefreshToken(
-    userId: string,
-    refreshToken: string,
-  ): Promise<User> {
-    if (!refreshToken) return;
+  private async updateRefreshToken(userId: string, refreshToken: string) {
+    let hashRt = '';
 
-    const hashRt = await argon.hash(refreshToken);
+    if (refreshToken) hashRt = await argon.hash(refreshToken);
 
-    const updatedUser = await this.userModel.findByIdAndUpdate(userId, {
+    await this.userModel.findByIdAndUpdate(userId, {
       hashRt,
     });
-
-    return updatedUser;
   }
 }

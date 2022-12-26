@@ -3,5 +3,5 @@ export enum authController {
   register = 'register',
   login = 'login',
   logout = 'logout',
-  refreshToken = 'refreshToken',
+  refreshToken = 'refresh-token',
 }
