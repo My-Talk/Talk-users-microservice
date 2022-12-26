@@ -11,14 +11,18 @@ export class UsersService {
   async searchByName(username: string) {
     const searchedUser = await this.userModel.findOne<User>({ username });
 
+    if (!searchedUser) return null;
+
     return new UserEntity(searchedUser);
   }
 
   async isUserExist(userId: string) {
-    const user = await this.userModel.findById<User>({ id: userId });
+    const user = await this.userModel.findById<User>(userId);
 
-    if (!user.phone) return false;
+    console.log({ user });
 
-    return true;
+    if (!user) return { data: false };
+
+    return { data: true };
   }
 }

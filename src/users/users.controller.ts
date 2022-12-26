@@ -20,13 +20,13 @@ export class UsersController {
     return currentUser;
   }
 
-  @Get(`:username`)
+  @Get(`/${usersController.search}/:username`)
   async searchByName(@Param('username') username: string): Promise<UserEntity> {
     return this.usersService.searchByName(username);
   }
 
-  @Get(`:username`)
-  async userExist(@Param('username') username: string): Promise<boolean> {
-    return this.usersService.isUserExist(username);
+  @Get(`/${usersController.exist}/:id`)
+  async userExist(@Param('id') userId: string): Promise<{ data: boolean }> {
+    return this.usersService.isUserExist(userId);
   }
 }
