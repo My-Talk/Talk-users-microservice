@@ -40,11 +40,12 @@ export class AuthService {
 
       return tokens;
     } catch (err) {
-      if (err.code === 11000) {
+      if (err.code === 11000)
         throw new ForbiddenException(
           'user with the givent credentials already exists.',
         );
-      }
+
+      throw err;
     }
   }
 
