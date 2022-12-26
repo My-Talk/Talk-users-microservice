@@ -28,3 +28,9 @@ yarn install
 ```bash
 yarn start:dev
 ```
+
+### Launch the openAPI documentation
+
+```bash
+http://localhost:3000/swagger
+```
