@@ -75,7 +75,7 @@ export class AuthService {
   }
 
   async refreshTokens(userId: string, bearerRt: string): Promise<Tokens> {
-    const user = await this.userModel.findById({ id: userId });
+    const user = await this.userModel.findById(userId);
 
     const isRtValid = await argon.verify(user.hashRt, bearerRt);
 

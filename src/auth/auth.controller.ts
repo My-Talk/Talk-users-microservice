@@ -29,11 +29,14 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  @PublicRoute()
   @Post(authController.refreshToken)
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtRefreshGuard)
   async refreshToken(@GetUser() user: any) {
-    return this.authService.refreshTokens(user.id, user.bearerRefreshToken);
+    const { id, bearerRefreshToken } = user;
+
+    return this.authService.refreshTokens(id, bearerRefreshToken);
   }
 
   @Post(authController.logout)

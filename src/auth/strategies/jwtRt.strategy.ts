@@ -31,8 +31,12 @@ export class JwtRefreshStrategy extends PassportStrategy(
       bearerRefreshToken,
     );
 
-    if (!user) throw new UnauthorizedException('Not authorized');
+    console.log({ user });
 
-    return { ...user, bearerRefreshToken };
+    if (!user) throw new UnauthorizedException('Not authorized.');
+
+    user['bearerRefreshToken'] = bearerRefreshToken;
+
+    return user;
   }
 }
