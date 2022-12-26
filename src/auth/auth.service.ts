@@ -11,6 +11,7 @@ import * as argon from 'argon2';
 import { JwtPayload, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,7 @@ export class AuthService {
       delete registerUserDto.password;
 
       const user = new this.userModel({
+        _id: uuidv4(),
         ...registerUserDto,
         hash,
       });
@@ -94,27 +96,21 @@ export class AuthService {
   }
 
   async jwtValidateUser(userId: string) {
-    const user = await this.userModel.findById(userId);
+    const user = await this.userModel.findById<User>(userId);
 
     if (!user || !user.hashRt) return null;
-
-    delete user.hash;
-    delete user.hashRt;
 
     return user;
   }
 
   async jwtRefreshValidateUser(userId: string, bearerRt: string) {
-    const user = await this.userModel.findById(userId);
+    const user = await this.userModel.findById<User>(userId);
 
     if (!user || !user.hashRt) return null;
 
     const isRtMatched = await argon.verify(user.hashRt, bearerRt);
 
     if (!isRtMatched) return null;
-
-    delete user.hash;
-    delete user.hashRt;
 
     return user;
   }

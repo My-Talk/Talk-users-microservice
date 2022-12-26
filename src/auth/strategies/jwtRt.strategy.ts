@@ -6,6 +6,7 @@ import { JWT_REFRESH } from '../auth.constant';
 import { AuthService } from '../auth.service';
 import { JwtPayload } from '../types';
 import { Request } from 'express';
+import { UserEntity } from 'src/users/entities';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -26,16 +27,16 @@ export class JwtRefreshStrategy extends PassportStrategy(
       .replace('Bearer', '')
       .trim();
 
-    const user = await this.authService.jwtRefreshValidateUser(
+    const userData = await this.authService.jwtRefreshValidateUser(
       payload.sub,
       bearerRefreshToken,
     );
 
-    console.log({ user });
+    if (!userData) throw new UnauthorizedException('Not authorized.');
 
-    if (!user) throw new UnauthorizedException('Not authorized.');
+    const user = new UserEntity(userData);
 
-    user['bearerRefreshToken'] = bearerRefreshToken;
+    user.setBearerRefreshToken(bearerRefreshToken);
 
     return user;
   }

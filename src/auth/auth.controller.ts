@@ -6,6 +6,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { UserEntity } from 'src/users/entities';
 import { AuthService } from './auth.service';
 import { GetUser, PublicRoute } from './decorator';
 import { LoginUserDto, RegisterUserDto } from './dto';
@@ -33,10 +34,8 @@ export class AuthController {
   @Post(authController.refreshToken)
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtRefreshGuard)
-  async refreshToken(@GetUser() user: any) {
-    const { id, bearerRefreshToken } = user;
-
-    return this.authService.refreshTokens(id, bearerRefreshToken);
+  async refreshToken(@GetUser() user: UserEntity) {
+    return this.authService.refreshTokens(user.getId, user.getBearerRt);
   }
 
   @Post(authController.logout)

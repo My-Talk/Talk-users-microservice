@@ -3,9 +3,11 @@ import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-// Creating a schema for the user
 @Schema()
 export class User {
+  @Prop()
+  _id: string;
+
   @Prop({ required: true, unique: true })
   username: string;
 
