@@ -1,14 +1,27 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { User } from 'src/mongodb/schemas';
 
 export class UserEntity {
+  @ApiProperty()
   private id: string;
+
+  @ApiProperty()
   private username: string;
+
+  @ApiProperty()
   private name: string;
+
+  @ApiProperty()
   private phone: number;
+
+  @ApiProperty()
   private avatar: string;
 
+  @ApiProperty()
   private createdAt: Date;
+
+  @ApiProperty()
   private updatedAt: Date;
 
   @Exclude({ toPlainOnly: true })
