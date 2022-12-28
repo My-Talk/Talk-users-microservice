@@ -37,6 +37,16 @@ export class UsersController {
     return this.usersService.searchByName(username);
   }
 
+  @Get(`/${usersController.find}/:userId`)
+  @ApiOkResponse({
+    description: 'User retrive successfully.',
+    type: UserEntity,
+  })
+  @ApiForbiddenResponse({ description: 'Not authorized.' })
+  async findById(@Param('userId') userId: string): Promise<UserEntity> {
+    return this.usersService.findById(userId);
+  }
+
   @Get(`/${usersController.exist}/:id`)
   @ApiOkResponse({
     description: 'User has been checked successfully.',
