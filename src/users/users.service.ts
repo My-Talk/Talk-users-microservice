@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { NotFoundError } from 'rxjs';
 import { User, UserDocument } from 'src/mongodb/schemas';
 import { UserEntity } from './entities';
 
@@ -10,6 +9,8 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async searchByName(username: string): Promise<UserEntity> {
+    console.log({ username });
+
     const searchedUser = await this.userModel.findOne<User>({ username });
 
     if (!searchedUser) throw new NotFoundException('User not found.');

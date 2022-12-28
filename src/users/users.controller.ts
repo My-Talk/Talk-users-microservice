@@ -1,8 +1,10 @@
 import {
   ClassSerializerInterceptor,
   Controller,
+  DefaultValuePipe,
   Get,
   Param,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
@@ -27,13 +29,15 @@ export class UsersController {
     return currentUser;
   }
 
-  @Get(`/${usersController.search}/:username`)
+  @Get(usersController.search)
   @ApiOkResponse({
     description: 'User retrive successfully.',
     type: UserEntity,
   })
   @ApiForbiddenResponse({ description: 'Not authorized.' })
-  async searchByName(@Param('username') username: string): Promise<UserEntity> {
+  async searchByName(
+    @Query('username', new DefaultValuePipe('')) username: string,
+  ): Promise<UserEntity> {
     return this.usersService.searchByName(username);
   }
 
@@ -47,12 +51,12 @@ export class UsersController {
     return this.usersService.findById(userId);
   }
 
-  @Get(`/${usersController.exist}/:id`)
+  @Get(`/${usersController.exist}/:userId`)
   @ApiOkResponse({
     description: 'User has been checked successfully.',
   })
   @ApiForbiddenResponse({ description: 'Not authorized.' })
-  async userExist(@Param('id') userId: string): Promise<{ data: boolean }> {
+  async userExist(@Param('userId') userId: string): Promise<{ data: boolean }> {
     return this.usersService.isUserExist(userId);
   }
 }
