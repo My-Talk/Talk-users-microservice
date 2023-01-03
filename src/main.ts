@@ -31,7 +31,7 @@ async function bootstrap() {
   const SwaggerConfig = new DocumentBuilder()
     .setTitle('Talk users microservices')
     .setDescription(
-      'Talk is a chat app that allows users to communicate by message instantly. This repository represents the microservice that manage users.',
+      'Talk is a chat app that allows users to communicate by message instantly.This repository represents the microservice that manage users.',
     )
     .setVersion('1.0')
     .addTag('users')
