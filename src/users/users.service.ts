@@ -3,10 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/mongodb/schemas';
 import { UserEntity } from './entities';
+import { USER_MODEL_TOKEN } from './users.costants';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel(USER_MODEL_TOKEN) private readonly userModel: Model<User>,
+  ) {}
 
   async searchByName(username: string): Promise<UserEntity> {
     const searchedUser = await this.userModel.findOne({ username });

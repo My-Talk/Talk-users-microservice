@@ -11,11 +11,12 @@ import * as argon from 'argon2';
 import { JwtPayload, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { USER_MODEL_TOKEN } from 'src/users/users.costants';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel('User') private userModel: Model<User>,
+    @InjectModel(USER_MODEL_TOKEN) private userModel: Model<User>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
