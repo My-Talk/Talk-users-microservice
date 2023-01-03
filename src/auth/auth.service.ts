@@ -5,18 +5,17 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/mongodb/schemas';
+import { User } from 'src/mongodb/schemas';
 import { LoginUserDto, RegisterUserDto } from './dto';
 import * as argon from 'argon2';
 import { JwtPayload, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel('User') private userModel: Model<User>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -27,13 +26,17 @@ export class AuthService {
 
       delete registerUserDto.password;
 
-      const user = new this.userModel({
-        _id: uuidv4(),
+      const newUser = new this.userModel({
         ...registerUserDto,
         hash,
       });
 
-      await user.save();
+      console.log({ id1: newUser.id });
+
+      const user = await newUser.save();
+
+      console.log({ id2: user.id });
+      console.log({ user });
 
       const tokens = await this.generateToken(user.id, user.username);
 

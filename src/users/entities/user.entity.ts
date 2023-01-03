@@ -4,7 +4,7 @@ import { User } from 'src/mongodb/schemas';
 
 export class UserEntity {
   @ApiProperty()
-  private _id: string;
+  private id: string;
 
   @ApiProperty()
   private username: string;
@@ -38,7 +38,7 @@ export class UserEntity {
   }
 
   init(userData: User) {
-    this._id = userData._id;
+    this.id = userData.id;
     this.username = userData.username;
     this.name = userData.name;
     this.phone = userData.phone;
@@ -53,7 +53,7 @@ export class UserEntity {
 
   get getDatas(): User {
     return {
-      _id: this._id,
+      id: this.id,
       username: this.username,
       name: this.name,
       phone: this.phone,
@@ -66,7 +66,7 @@ export class UserEntity {
   }
 
   get getId() {
-    return this._id;
+    return this.id;
   }
 
   get getUsername() {

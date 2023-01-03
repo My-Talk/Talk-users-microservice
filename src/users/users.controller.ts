@@ -48,6 +48,9 @@ export class UsersController {
   })
   @ApiForbiddenResponse({ description: 'Not authorized.' })
   async findById(@Param('userId') userId: string): Promise<UserEntity> {
+    console.log('hello world !');
+    console.log({ userId });
+
     return this.usersService.findById(userId);
   }
 
