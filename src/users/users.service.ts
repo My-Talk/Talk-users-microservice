@@ -20,8 +20,6 @@ export class UsersService {
   }
 
   async findById(userId: string): Promise<UserEntity> {
-    console.log({ userId });
-
     const user = await this.userModel.findById<User>(userId);
 
     if (!user) throw new NotFoundException('User not foud.');

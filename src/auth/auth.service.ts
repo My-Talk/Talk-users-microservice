@@ -32,12 +32,7 @@ export class AuthService {
         hash,
       });
 
-      console.log({ id1: newUser.id });
-
       const user = await newUser.save();
-
-      console.log({ id2: user.id });
-      console.log({ user });
 
       const tokens = await this.generateToken(user.id, user.username);
 

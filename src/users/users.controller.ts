@@ -12,6 +12,7 @@ import { UsersService } from './users.service';
 import { usersController } from './enum';
 import { UserEntity } from './entities';
 import { ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { IsMongodbObjectIdPipe } from 'src/common/pipes';
 
 @Controller(usersController.users)
 @UseInterceptors(ClassSerializerInterceptor)
@@ -47,10 +48,9 @@ export class UsersController {
     type: UserEntity,
   })
   @ApiForbiddenResponse({ description: 'Not authorized.' })
-  async findById(@Param('userId') userId: string): Promise<UserEntity> {
-    console.log('hello world !');
-    console.log({ userId });
-
+  async findById(
+    @Param('userId', IsMongodbObjectIdPipe) userId: string,
+  ): Promise<UserEntity> {
     return this.usersService.findById(userId);
   }
 
@@ -59,7 +59,9 @@ export class UsersController {
     description: 'User has been checked successfully.',
   })
   @ApiForbiddenResponse({ description: 'Not authorized.' })
-  async userExist(@Param('userId') userId: string): Promise<{ data: boolean }> {
+  async userExist(
+    @Param('userId', IsMongodbObjectIdPipe) userId: string,
+  ): Promise<{ data: boolean }> {
     return this.usersService.isUserExist(userId);
   }
 }
