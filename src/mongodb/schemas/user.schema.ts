@@ -1,22 +1,61 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose from 'mongoose';
 
-export type UserDocument = HydratedDocument<User>;
+export const UserSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    require: true,
+    unique: true,
+    minLength: 5,
+    maxLength: 15,
+    index: true,
+  },
 
-// Creating a schema for the user
-@Schema()
-export class User {
-  @Prop({ required: true })
+  name: {
+    type: String,
+    default: '',
+    maxLength: 50,
+  },
+
+  phone: {
+    type: Number,
+    require: true,
+    unique: true,
+  },
+
+  avatar: {
+    type: String,
+    default: '',
+  },
+
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now(),
+  },
+
+  updatedAt: {
+    type: Date,
+    default: () => Date.now(),
+  },
+
+  hash: String,
+
+  hashRt: String,
+});
+
+UserSchema.pre('save', function (next) {
+  this.updatedAt = new Date(Date.now());
+  next();
+});
+
+export interface User {
+  id: string;
   username: string;
-
-  @Prop({ required: true })
-  phone: string;
-
-  @Prop({ required: true })
-  password: string;
-
-  @Prop()
+  name: string;
+  phone: number;
   avatar: string;
+  createdAt: Date;
+  updatedAt: Date;
+  hash: string;
+  hashRt: string;
 }
-
-export const CatSchema = SchemaFactory.createForClass(User);

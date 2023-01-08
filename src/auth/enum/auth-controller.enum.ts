@@ -1,7 +1,7 @@
-export enum authConyroller {
+export enum authController {
   auth = 'auth',
   register = 'register',
   login = 'login',
   logout = 'logout',
-  refreshToken = 'refreshToken',
+  refreshToken = 'refresh-token',
 }
