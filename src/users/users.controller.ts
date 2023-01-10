@@ -38,7 +38,7 @@ export class UsersController {
   @ApiForbiddenResponse({ description: 'Not authorized.' })
   async searchByName(
     @Query('username', new DefaultValuePipe('')) username: string,
-  ): Promise<UserEntity> {
+  ): Promise<UserEntity[]> {
     return this.usersService.searchByName(username);
   }
 

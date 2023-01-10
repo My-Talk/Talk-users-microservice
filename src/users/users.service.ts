@@ -11,14 +11,20 @@ export class UsersService {
     @InjectModel(USER_MODEL_TOKEN) private readonly userModel: Model<User>,
   ) {}
 
-  async searchByName(username: string): Promise<UserEntity> {
-    const searchedUser = await this.userModel.findOne({
+  async searchByName(username: string): Promise<UserEntity[]> {
+    const searchedUser = await this.userModel.find({
       username: { $regex: new RegExp(username), $options: 'i' },
     });
 
     if (!searchedUser) throw new NotFoundException('User not found.');
 
-    return new UserEntity(searchedUser);
+    const results = [];
+
+    for (let user of searchedUser) {
+      results.push(new UserEntity(user));
+    }
+
+    return results;
   }
 
   async findById(userId: string): Promise<UserEntity> {
